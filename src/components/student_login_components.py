@@ -44,7 +44,7 @@ def student_login_comp():
                 time.sleep(1)
                 st.rerun()
             else:
-                st.error(message, icon="material/error:")
+                st.error(message, icon=":material/error:")
 
     with btn2:
        if st.button("Register instead",type="secondary", width="stretch", icon=":material/passkey:"):
