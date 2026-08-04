@@ -147,7 +147,6 @@ def get_assigned_teachers(subject_id):
 # --------------------------------Lectures Table-------------------------------
 
 def is_lec_scheduled(division, timestamp):
-    timestamp = timestamp.astimezone(ZoneInfo("Asia/Kolkata")).isoformat()
     response = (
         supabase
         .table("lectures")
@@ -202,7 +201,6 @@ def get_lectures(teacher_id = None, student_div = None, student_course= None):
         return response.data
 
 def add_lecture(subject_id, teacher_id, division, timestamp):
-    timestamp = timestamp.astimezone(ZoneInfo("Asia/Kolkata")).isoformat()
     data = {"subject_id" : subject_id, "teacher_id" : teacher_id, "division" : division, "lec_timestamp" : timestamp}
     response = supabase.table("lectures").insert(data).execute()
     return response
