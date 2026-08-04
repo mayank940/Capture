@@ -2,6 +2,8 @@ import streamlit as st
 from src.database.db import check_sub_exists, add_subject, get_all_subjects, get_all_teachers, is_sub_assigned, assign_subject, get_assigned_subjects, get_sem_subjects, get_course_divisions, get_assigned_teachers, add_lecture, is_lec_scheduled
 import pandas as pd
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 def subject_comp():
 
@@ -198,7 +200,8 @@ def lectures_comp():
         options = teachers["teacher_id"]
     selected_teacher = st.selectbox("Teachers :", options,format_func= lambda x: labels[x], index=None, placeholder="Select the teacher")
 
-    lec_time = st.datetime_input("Date & Time :", min_value="now", step=60).astimezone()
+    now = datetime.now(tz=ZoneInfo("Asia/Kolkata"))
+    lec_time = st.datetime_input("Date & Time :", min_value=now, step=60).astimezone(ZoneInfo("Asia/Kolkata"))
 
     st.space()
     if st.button("Schedule Lecture", type="primary", width="stretch"):
