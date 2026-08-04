@@ -205,7 +205,6 @@ def lectures_comp():
 
     if lec_time:
         lec_time = lec_time.replace(tzinfo=ZoneInfo("Asia/Kolkata"))
-        st.header(lec_time)
 
     st.space()
     if st.button("Schedule Lecture", type="primary", width="stretch"):
