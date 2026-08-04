@@ -6,9 +6,11 @@ pandas
 scikit-learn
 insightface
 opencv-python-headless
+<<<<<<< HEAD
 
+=======
+>>>>>>> 54369bfb73ef9603602634bc5f22bd3764322560
 
-git+https://github.com/ageitgey/face_recognition_models
 setuptools<70.0.0
 
 supabase
