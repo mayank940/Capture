@@ -33,24 +33,22 @@ def student_login_comp():
 
     btn1, btn2 = st.columns(2, gap="medium")
 
-    with btn1:
-        if st.button("Login", shortcut="control+enter", type="primary", width="stretch", icon=":material/passkey:"):
-            st.session_state["is_camera"] = False
-            success, message, student = login_student(std_username, std_password, std_image)
-            if success:
-                st.session_state["is_logged_in"] = True
-                st.session_state["student_data"] = student
-                st.success(message, icon=":material/check_circle:")
-                time.sleep(1)
-                st.rerun()
-            else:
-                st.error(message, icon=":material/error:")
+    if btn1.button("Login", shortcut="control+enter", type="primary", width="stretch", icon=":material/passkey:"):
+        st.session_state["is_camera"] = False
+        success, message, student = login_student(std_username, std_password, std_image)
+        if success:
+            st.session_state["is_logged_in"] = True
+            st.session_state["student_data"] = student
+            st.success(message, icon=":material/check_circle:")
+            time.sleep(1)
+            st.rerun()
+        else:
+            st.error(message, icon=":material/error:")
 
-    with btn2:
-       if st.button("Register instead",type="secondary", width="stretch", icon=":material/passkey:"):
-           st.session_state["is_camera"] = False
-           st.session_state["login_type"] = "register"
-           st.rerun()
+   if btn2.button("Register instead",type="secondary", width="stretch", icon=":material/passkey:"):
+       st.session_state["is_camera"] = False
+       st.session_state["login_type"] = "register"
+       st.rerun()
 
 def login_student(username, password, face_img = None):
 
