@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+
+# Virtual Environments
+venv/
+
+# Envirionment Variables
+.env
+
+.streamlit/cache/
+
+# streamlit secret variables
+.streamlit
