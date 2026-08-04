@@ -204,7 +204,7 @@ def lectures_comp():
     lec_time = st.datetime_input("Date & Time :", min_value=now, value = None,  step=60)
 
     if lec_time:
-        lec_time = lec_time..replace(tzinfo=ZoneInfo("Asia/Kolkata"))
+        lec_time = lec_time.replace(tzinfo=ZoneInfo("Asia/Kolkata"))
         st.header(lec_time)
 
     st.space()
