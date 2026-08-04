@@ -5,6 +5,7 @@ pandas
 
 scikit-learn
 insightface
+opencv-python-headless
 
 setuptools<70.0.0
 
