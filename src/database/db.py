@@ -163,13 +163,13 @@ def get_lectures(teacher_id = None, student_div = None, student_course= None):
 
     start = datetime.combine(
         today,
-        time(9, 0),
+        time(0, 0),
         tzinfo = ZoneInfo("Asia/Kolkata")
     )
 
     end = datetime.combine(
         today,
-        time(17, 0),
+        time(23, 59),
         tzinfo = ZoneInfo("Asia/Kolkata")
     )
 
