@@ -145,7 +145,7 @@ def student_register_comp():
             st.space()
             st.error(message, icon=":material/error:")
 
-    if st.button("Login instead", type="secondary", width="stretch"):
+    if btn2.button("Login instead", type="secondary", width="stretch"):
        st.session_state["all_images"] = []
        st.session_state["is_camera"] = False
        st.session_state["login_type"] = "login"
