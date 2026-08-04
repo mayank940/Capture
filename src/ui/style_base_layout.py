@@ -22,7 +22,7 @@ def style_base_layout():
             --input_border : #D1D5DB;
         }
 
-        header[data-testid="stHeader"]{
+//        header[data-testid="stHeader"]{
             display : none;
         }
 
@@ -41,7 +41,27 @@ def style_base_layout():
             color: var(--text_secondary) !important;
             font-family: "Poppins", san-serif !important;
         }   
+
+        section[role="dialog"]{
+            background-color : var(--card_background);
+            border : 2px solid #E5E7EB;
+            border-radius : 18px;
+            color : #6B7280;
+        }
+
+        section[role="dialog"] h2 p{
+            padding: 1rem;
+            color : #1F2937;
+        }
             
+        button[aria-label="Close"]{
+            color : #6B7280;
+        }
+
+        button[aria-label="Close"]:hover{
+            color : #1F2937;
+        }
+
         button, p{
             font-family: "Inter", san-serif !important;    
         }
@@ -137,13 +157,30 @@ def style_base_layout():
         }
                 
         div[data-testid="stAlert"] div[role="status"]{
-            background-color: #DCFCE7;
-            color: #166534;        
+            background-color : #F0FDF4;
+            border : 1px solid #BBF7D0;
+            border-left : 4px solid #22C55E;
+            color : #166534;
+            //background-color: #DCFCE7;
+            //color: #166534;        
+        }
+
+        div[data-testid="stAlert"] div[role="status"] span[data-testid="stAlertDynamicIcon"]{
+            color : #22C55E;
         }
                 
         div[data-testid="stAlert"] div[role="alert"]{
-            background-color: #FEF3C7;
-            color: #92400E;        
+            background-color : #FEF2F2;
+            border : 1px solid #FECACA;
+            border-left : 4px solid #EF4444;
+            color : #EF4444;
+
+            //background-color: #FEF3C7;
+            //color: #92400E;        
+        }
+
+        div[data-testid="stAlert"] div[role="alert"] span[data-testid="stAlertDynamicIcon"]{
+            color : #EF4444;
         }
 
         div[data-testid="stAlert"] div:has(div[data-testid="stAlertContentInfo"]){
@@ -155,7 +192,7 @@ def style_base_layout():
             color : #6B7280;
         }
 
-        div[data-testid="stAlert"] span[data-testid="stAlertDynamicIcon"]{
+        div[data-testid="stAlert"] div:has(div[data-testid="stAlertContentInfo"]) span[data-testid="stAlertDynamicIcon"]{
             color : #7B2CBF;
         }
 

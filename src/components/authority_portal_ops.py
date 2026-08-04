@@ -28,11 +28,11 @@ def subject_comp():
     if st.button("Add subject",shortcut="control+enter", type="primary", width="stretch"):
         success, message = add_subject_py(course_name, semester, sub_code, sub_name)
         if success:
-            st.success(message)
+            st.success(message, icon=":material/check_circle:")
             time.sleep(2)
             st.rerun()
         else:
-            st.error(message)
+            st.error(message, icon=":material/error:")
 
     st.divider()
 
@@ -138,14 +138,13 @@ def teacher_sub_box(i, teacher, subjects_df):
                         <p style="margin-left:3rem; color:var(--text_secondary);">No subjects assigned yet.</p>
                     """, unsafe_allow_html=True)
 
-                pad, content = st.columns([2, 98])
+                _, content = st.columns([2, 98])
 
                 if content.button("Add subject", icon=":material/add_2:", type="tertiary", key=f"add_sub{i}"):
                     add_subject_dialog(subjects_df, teacher)
 
 @st.dialog("Select the subject")
 def add_subject_dialog(subjects_df, teacher):
-    st.header("Select subject")
 
     courses = subjects_df["course"].unique().tolist()
     selected_course = st.selectbox("Course :", courses, index=None, placeholder="Select the course ")
@@ -162,15 +161,15 @@ def add_subject_dialog(subjects_df, teacher):
 
     if st.button(f"Assign subject to {teacher["name"]}", disabled = not(bool(selected_sub)), type="primary", width="stretch"):
         if is_sub_assigned(teacher["teacher_id"], selected_sub):
-            st.error("Subject is already assigned")
+            st.error("Subject is already assigned", icon=":material/error:")
         else:
             try:
                 assign_subject(teacher["teacher_id"], selected_sub)
-                st.success(f"Successfully assigned{subjects[subjects["subject_id"] == selected_sub].iloc[0,1]} to {teacher["name"]}.")
+                st.success(f"Successfully assigned{subjects[subjects["subject_id"] == selected_sub].iloc[0,1]} to {teacher["name"] }.", icon=":material/check_circle:")
                 time.sleep(1)
                 st.rerun()
             except Exception as e:
-                st.error(e)
+                st.error("Unexpected Error", icon=":material/error:")
 
 def lectures_comp():
     st.subheader("Arrange Lectures", text_alignment="center")
@@ -210,11 +209,11 @@ def lectures_comp():
     if st.button("Schedule Lecture", type="primary", width="stretch"):
         success, message = schedule_lec(selected_subject, selected_teacher, selected_div, lec_time, sub_labels)
         if success:
-            st.success(message)
+            st.success(message, icon=":material/check_circle:")
             time.sleep(2)
             st.rerun()
         else:
-            st.error(message)
+            st.error(message, icon=":material/error:")
 
 def schedule_lec(subject_id, teacher_id, division, timestamp, sub_names):
     info = [subject_id, teacher_id, division, timestamp]
@@ -229,4 +228,4 @@ def schedule_lec(subject_id, teacher_id, division, timestamp, sub_names):
         add_lecture(subject_id, teacher_id, division, timestamp)
         return True, f"Lecture of {sub_names[subject_id]} for division {division} is scheduled on {timestamp.date()} {timestamp.time()}"
     except Exception as e:
-        return False, e
+        return False, "Unexpected Error"

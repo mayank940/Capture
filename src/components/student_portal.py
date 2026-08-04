@@ -162,7 +162,7 @@ def attendance_records(student):
     if  records_df is None:
         return
     elif records_df.empty:
-        st.error("No records found for the selected data")
+        st.error("No records found for the selected data", icon=":material/error:")
         return
 
     records_df["date"] = records_df["timestamp"].apply(date_format)

@@ -21,15 +21,16 @@ def teacher_register_comp():
 
     if btn1.button("Register", type="primary", width="stretch", shortcut="control+enter", icon=":material/passkey:"):
         success, message = register_teacher(teacher_username, teacher_name, teacher_pass,teacher_pass_conf)        
-
         if success:
-             st.success(message)
+             st.space()
+             st.success(message, icon=":material/check_circle:")
              time.sleep(1)
              st.session_state["login_type"] = "login"
              st.rerun()
 
         else:
-             st.error(message)
+             st.space()
+             st.error(message, icon=":material/error:")
 
     if btn2.button("Login instead", type="secondary", width="stretch", icon=":material/passkey:"):
         st.session_state["login_type"] = "login"
@@ -71,13 +72,15 @@ def teacher_login_comp():
     if btn1.button("Login",type="primary", icon=":material/passkey:", width="stretch", shortcut="control+enter"):
         response = get_teacher_cred(teacher_username, teacher_password)
         if response:
-            st.success(f"logged in successfully!, welcome {response["name"]}")
+            st.space()
+            st.success(f"logged in successfully!, welcome {response["name"]}", icon=":material/check_circle:")
             st.session_state["teacher_data"] = response
             st.session_state["is_logged_in"] = True
             time.sleep(1)
             st.rerun()
         else:
-            st.error("Invalid username or password")
+            st.space()
+            st.error("Invalid username or password", icon=":material/error:")
         
 
     if btn2.button("Register instead", type="secondary", icon=":material/passkey:", width="stretch"):

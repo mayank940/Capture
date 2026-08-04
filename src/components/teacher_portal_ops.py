@@ -47,15 +47,15 @@ def submit_attendance(students_df, selected_lec):
         if not get_lecture_status(lec_id)["is_conducted"]:
             try:
                 add_attendance_logs(logs_data)
-                st.success("Attendance data submitted Successfully!")
+                st.success("Attendance data submitted Successfully!",icon=":material/check_circle:")
                 mark_lecture_true(lec_id)
-                st.success("Updated Lecture status to conducted")
+                st.success("Updated Lecture status to conducted", icon=":material/check_circle:")
                 time.sleep(2)
                 st.rerun()
             except Exception as e:
-                st.error(e)
+                st.error("Unexpected Error", icon=":material/error:")
         else:
-            st.error("Lecture is already conducted")
+            st.error("Lecture is already conducted", icon=":material/error:")
 
 
 def upload_img_comp(selected_lec):
@@ -94,8 +94,11 @@ def upload_img_comp(selected_lec):
         if "is_camera" in st.session_state and  st.session_state["is_camera"]:
             uploaded_img = st.camera_input("Click Photo")
             if st.button("Add image", type="tertiary", icon=":material/add:"):
-                st.session_state["all_images"].append(uploaded_img)
-                st.rerun()
+                if uploaded_img:
+                    st.session_state["all_images"].append(uploaded_img)
+                    st.rerun()
+                else:
+                    st.error("No photo clicked", icon=":material/error:" )
 
         if st.session_state["all_images"]:
             st.space()

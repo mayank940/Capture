@@ -40,11 +40,11 @@ def student_login_comp():
             if success:
                 st.session_state["is_logged_in"] = True
                 st.session_state["student_data"] = student
-                st.success(message)
+                st.success(message, icon=":material/check_circle:")
                 time.sleep(1)
                 st.rerun()
             else:
-                st.error(message)
+                st.error(message, icon="material/error:")
 
     with btn2:
        if st.button("Register instead",type="secondary", width="stretch", icon=":material/passkey:"):
@@ -112,7 +112,7 @@ def student_register_comp():
     if st.session_state["is_camera"]:
         camera_img = st.camera_input("Position your face in the center:")
         if st.button("Add image", type="secondary"):
-            st.session_state["all_images"].append(camera_img) if camera_img else st.error("Please click photo first")
+            st.session_state["all_images"].append(camera_img) if camera_img else st.error("Please click photo first", icon=":material/error:")
 
     if st.session_state["all_images"]:
         st.subheader("Selected Images:")
@@ -137,12 +137,12 @@ def student_register_comp():
             success, message = register_student(std_username, std_name, std_password, std_password_conf, st.session_state["all_images"])
             if success:
                 st.session_state["all_images"] = []
-                st.success(message)
+                st.success(message, icon=":material/check_circle")
                 st.session_state["login_type"] = "login"
                 time.sleep(1)
                 st.rerun()
             else:
-                st.error(message)
+                st.error(message, icon=":material/error:")
 
     with btn2:
        if st.button("Login instead", type="secondary", width="stretch"):
