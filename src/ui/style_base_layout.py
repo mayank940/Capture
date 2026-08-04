@@ -22,6 +22,10 @@ def style_base_layout():
             --input_border : #D1D5DB;
         }
 
+        header[data-testid="stHeader"]{
+            display : none;
+        }
+
         [data-testid="stAppViewContainer"]{
             background-color : var(--background);
         }
