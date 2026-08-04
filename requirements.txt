@@ -6,10 +6,6 @@ pandas
 scikit-learn
 insightface
 opencv-python-headless
-<<<<<<< HEAD
-
-=======
->>>>>>> 54369bfb73ef9603602634bc5f22bd3764322560
 
 setuptools<70.0.0
 
