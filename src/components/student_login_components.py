@@ -45,7 +45,7 @@ def student_login_comp():
         else:
             st.error(message, icon=":material/error:")
 
-   if btn2.button("Register instead",type="secondary", width="stretch", icon=":material/passkey:"):
+    if btn2.button("Register instead",type="secondary", width="stretch", icon=":material/passkey:"):
        st.session_state["is_camera"] = False
        st.session_state["login_type"] = "register"
        st.rerun()
