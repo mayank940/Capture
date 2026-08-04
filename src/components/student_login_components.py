@@ -20,8 +20,11 @@ def student_login_comp():
     std_image = None
     remove_focus()
 
-    if st.button("Login using FaceID", type="secondary", width="stretch", icon=":material/add_a_photo:", key="camera_btn"):
-        st.session_state["is_camera"] = True
+    cam_text = "Close camera" if st.session_state["is_camera"] else "Login using FaceId"
+    cam_icon = ":material/close:" if st.session_state["is_camera"] else ":material/add_a_photo:"
+    if st.button(cam_text, type="secondary", width="stretch", icon=cam_icon, key="camera_btn"):
+        st.session_state["is_camera"] = not st.session_state["is_camera"]
+        st.rerun()
 
     if st.session_state["is_camera"]:
         std_image = st.camera_input("Position your face in the center")
@@ -79,6 +82,9 @@ def login_student(username, password, face_img = None):
 def student_register_comp():
     style_student_login_comps()
 
+    if "is_camera" not in st.session_state:
+        st.session_state["is_camera"] = False
+
     if "all_images" not in st.session_state:
         st.session_state["all_images"] = []
 
@@ -96,8 +102,12 @@ def student_register_comp():
         if st.button("Add images", type="secondary"):
             add_image()
 
-    if st.button("Take a picture", type="secondary", icon=":material/add_a_photo:", width="stretch"):
-        st.session_state["is_camera"] = True
+    cam_text = "Close camera" if st.session_state["is_camera"] else "Take a picture"
+    cam_icon = ":material/close:" if st.session_state["is_camera"] else ":material/add_a_photo:"    
+    if st.button(cam_text, type="secondary", icon=cam_icon, width="stretch"):
+        st.session_state["is_camera"] = not st.session_state["is_camera"]
+        st.rerun()
+    st.info("Tip : Upload atleast 4-5 images in different conditions for better results", icon=":material/info:")
 
     if st.session_state["is_camera"]:
         camera_img = st.camera_input("Position your face in the center:")

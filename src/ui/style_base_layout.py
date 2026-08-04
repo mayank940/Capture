@@ -146,6 +146,19 @@ def style_base_layout():
             color: #92400E;        
         }
 
+        div[data-testid="stAlert"] div:has(div[data-testid="stAlertContentInfo"]){
+            background-color : var(--card-background);
+            border: 1px solid #E5E7EB;
+            border-left : 4px solid #7B2CBF;
+            border-radius : 12px;
+            box-shadow : 0 4px 12px rgba(36, 0, 70, 0.08);
+            color : #6B7280;
+        }
+
+        div[data-testid="stAlert"] span[data-testid="stAlertDynamicIcon"]{
+            color : #7B2CBF;
+        }
+
         div[data-testid="stText"] span{
             color : var(--text_primary);
         }
