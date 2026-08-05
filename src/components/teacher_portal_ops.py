@@ -8,13 +8,20 @@ import time
 
 def detect_faces_comp(selected_lec):
 
+    prog_bar = st.progress(0, "")
+    time.sleep(0.2)
+    prog_bar.progress(33, "Fetching Student data")
     images_np = [np.array(Image.open(img)) for img in st.session_state["all_images"]]
     div_students = get_div_students(selected_lec["subjects"]["course"], selected_lec["division"])
 
+    prog_bar.progress(66, "Detecting Faces")
     detect_faces_attendance(images_np, div_students)
 
+    prog_bar.progress(99, "Matching detected faces")
+    time.sleep(0.5)
     students_df = pd.DataFrame(div_students)
 
+    prog_bar.empty()
     return students_df
 
 @st.fragment

@@ -73,20 +73,27 @@ def manage_subjects(teacher):
     teacher = st.session_state["teacher_data"]
     subjects = get_assigned_subjects(teacher["teacher_id"])
 
-    for subject in subjects:
-        with st.container(border=True):
-            st.subheader(subject["subject_name"])
-            st.markdown(f""":color[Subject Code :]{{foreground="#6B7280"}}  **:color[{subject["subject_code"]}]{{foreground="#C77DFF"}}** """)
-            st.markdown(f":color[Course : **{subject["course"]}**  Semester : **{subject["semester"]}**]{{foreground='#6B7280'}}")
+    st.space()
+    if subjects:
+        for subject in subjects:
+            with st.container(border=True):
+                st.subheader(subject["subject_name"])
+                st.markdown(f""":color[Subject Code :]{{foreground="#6B7280"}}  **:color[{subject["subject_code"]}]{{foreground="#C77DFF"}}** """)
+                st.markdown(f":color[Course : **{subject["course"]}**  Semester : **{subject["semester"]}**]{{foreground='#6B7280'}}")
+    else:
+        st.info("📖 No subjects assigned by the authority yet!")
 
 def manage_lectures(teacher):
     st.subheader("Manage Lectures", text_alignment="center")
     lectures = get_lectures(teacher_id = teacher["teacher_id"])
 
     st.space()
-    for lecture in lectures:
-        subject = lecture["subjects"]
-        with st.container():
-            st.subheader(subject["subject_name"])
-            st.markdown(f":color[Time **{lecture["lec_timestamp"]}**    Division : **{lecture["division"]}**]{{foreground='#6B7280'}}")
-            st.markdown(f":color[Subject Code : **{subject['subject_code']}**  Semester : **{subject['semester']}**  Course : **{subject['course']}**]{{foreground='#6B7280'}}")
+    if lectures:
+        for lecture in lectures:
+            subject = lecture["subjects"]
+            with st.container():
+                st.subheader(subject["subject_name"])
+                st.markdown(f":color[Time **{lecture["lec_timestamp"]}**    Division : **{lecture["division"]}**]{{foreground='#6B7280'}}")
+                st.markdown(f":color[Subject Code : **{subject['subject_code']}**  Semester : **{subject['semester']}**  Course : **{subject['course']}**]{{foreground='#6B7280'}}")
+    else:
+        st.info("📚 No lectures scheduled by the authority for today!")

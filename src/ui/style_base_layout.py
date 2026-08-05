@@ -22,7 +22,7 @@ def style_base_layout():
             --input_border : #D1D5DB;
         }
 
-        header[data-testid="stHeader"]{
+//        header[data-testid="stHeader"]{
             display : none;
         }
 
@@ -194,6 +194,22 @@ def style_base_layout():
 
         div[data-testid="stAlert"] div:has(div[data-testid="stAlertContentInfo"]) span[data-testid="stAlertDynamicIcon"]{
             color : #7B2CBF;
+        }
+
+        div[data-testid="stProgress"] p{
+            color : var(--text_primary);
+            margin : 4px;
+            font-weight : 400;
+            font-size : 1rem;
+        }
+
+        div[data-testid="stProgressBarTrack"] > div{
+            background-color : var(--secondary);
+        }
+
+        div[data-testid="stProgress"] div[data-testid="stProgressBarTrack"]{
+            background-color : var(--card_background);
+            box-shadow : 2px 2px 3px rgba(0, 0, 0, 0.1);
         }
 
         div[data-testid="stText"] span{
