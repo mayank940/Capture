@@ -1,7 +1,8 @@
 from src.database.config import supabase
 import bcrypt 
-from datetime import datetime, timezone, date, time
+from datetime import datetime, timezone, date, time, timedelta
 from zoneinfo import ZoneInfo
+import streamlit as st
 
 # -----------------------------------hashing----------------------------------------
 
@@ -157,7 +158,7 @@ def is_lec_scheduled(division, timestamp):
     )
     return len(response.data) > 0
 
-def get_lectures(teacher_id = None, student_div = None, student_course= None):
+def get_lectures(teacher_id = None, student_div = None, student_course= None, pending=False):
 
     today = date.today()
 
@@ -165,25 +166,40 @@ def get_lectures(teacher_id = None, student_div = None, student_course= None):
         today,
         time(0, 0),
         tzinfo = ZoneInfo("Asia/Kolkata")
-    )
+    ).isoformat()
 
     end = datetime.combine(
         today,
         time(23, 59),
         tzinfo = ZoneInfo("Asia/Kolkata")
-    )
+    ).isoformat()
 
-    if teacher_id:
+    if teacher_id and pending:
         response = (
             supabase
             .table("lectures")
             .select("*, subjects!inner(*)")
             .eq("teacher_id", teacher_id)
             .eq("is_conducted", False)
-            .gte("lec_timestamp", start.isoformat())
-            .lte("lec_timestamp", end.isoformat())
+            .gte("lec_timestamp", start)
+            .lte("lec_timestamp", end)
+            .order("lec_timestamp", desc=True)
             .execute()
             )
+        return response.data
+
+    elif teacher_id and not pending:
+        response = (
+            supabase
+            .table("lectures")
+            .select("*, subjects!inner(*)")
+            .eq("teacher_id", teacher_id)
+            .gte("lec_timestamp", start)
+            .lte("lec_timestamp", end)
+            .order("lec_timestamp", desc=True)
+            .execute()
+        )
+
         return response.data
 
     elif student_div and student_course:
@@ -199,6 +215,27 @@ def get_lectures(teacher_id = None, student_div = None, student_course= None):
             .execute()
         )
         return response.data
+
+def get_previous_lectures(teacher_id):
+    today = date.today()
+    today = datetime.combine(
+        today,
+        time(0, 0),
+        ZoneInfo("Asia/Kolkata")
+    )
+
+    response = (
+        supabase
+        .table("lectures")
+        .select("*, subjects!inner(*)")
+        .eq("teacher_id", teacher_id)
+        .lte("lec_timestamp", today)
+        .order("lec_timestamp", desc=True)
+        .limit(5)
+        .execute()
+    )
+
+    return response.data
 
 def add_lecture(subject_id, teacher_id, division, timestamp):
     data = {"subject_id" : subject_id, "teacher_id" : teacher_id, "division" : division, "lec_timestamp" : timestamp.isoformat()}

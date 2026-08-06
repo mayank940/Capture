@@ -10,14 +10,14 @@ def detect_faces_comp(selected_lec):
 
     prog_bar = st.progress(0, "")
     time.sleep(0.2)
-    prog_bar.progress(33, "Fetching Student data")
+    prog_bar.progress(33, "📥 Fetching enrolled students...")
     images_np = [np.array(Image.open(img)) for img in st.session_state["all_images"]]
     div_students = get_div_students(selected_lec["subjects"]["course"], selected_lec["division"])
 
-    prog_bar.progress(66, "Detecting Faces")
+    prog_bar.progress(66, "🔍 Detecting faces...")
     detect_faces_attendance(images_np, div_students)
 
-    prog_bar.progress(99, "Matching detected faces")
+    prog_bar.progress(99, "🧩 Matching identities...")
     time.sleep(0.5)
     students_df = pd.DataFrame(div_students)
 
@@ -48,13 +48,15 @@ def submit_attendance(students_df, selected_lec):
     lec_id = selected_lec["lecture_id"]
     students_df["lecture_id"] = lec_id
 
+    n_presents = students_df["is_present"].sum()
+    st.info(f"👥 Present students : {n_presents} / {students_df["is_present"].count()}")
     logs_data = students_df[["lecture_id", "student_id", "is_present"]].to_dict(orient="records")
     
     if st.button("Submit Attendance", type="primary", width="stretch"):
         if not get_lecture_status(lec_id)["is_conducted"]:
             try:
                 add_attendance_logs(logs_data)
-                st.success("Attendance data submitted Successfully!",icon=":material/check_circle:")
+                st.success(f"🎉 {n_presents} students marked present!")
                 mark_lecture_true(lec_id)
                 st.success("Updated Lecture status to conducted", icon=":material/check_circle:")
                 time.sleep(2)

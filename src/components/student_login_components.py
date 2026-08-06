@@ -107,7 +107,7 @@ def student_register_comp():
     if st.button(cam_text, type="secondary", icon=cam_icon, width="stretch"):
         st.session_state["is_camera"] = not st.session_state["is_camera"]
         st.rerun()
-    st.info("Tip : Upload atleast 4-5 images in different conditions for better results", icon=":material/info:")
+    st.info("Tip : Upload atleast 🖼️ 4-5 images in different conditions for better results", icon=":material/info:")
 
     if st.session_state["is_camera"]:
         camera_img = st.camera_input("Position your face in the center:")

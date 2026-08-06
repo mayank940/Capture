@@ -59,6 +59,7 @@ def add_subject_py(course_name, semester, sub_code, sub_name):
         return False, e
 
 def show_subjects():
+    st.space()
     subjects = get_all_subjects()
 
     df = pd.DataFrame(subjects)

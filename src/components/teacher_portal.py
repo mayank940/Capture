@@ -1,11 +1,9 @@
 import streamlit as st
 from src.ui.style_teacher_screen import  style_teacher_portal
-from src.database.db import get_assigned_subjects, get_lectures, get_div_students, add_attendance_logs
+from src.database.db import get_assigned_subjects, get_lectures, get_previous_lectures  
 from src.components.teacher_portal_ops import upload_img_comp, detect_faces_comp, submit_frag
-from src.pipelines.face_pipeline import detect_faces_attendance, preview_detected_faces
-import numpy as np
-import pandas as pd
-from PIL import Image
+from datetime import datetime, date, time
+from zoneinfo import ZoneInfo
 
 def teacher_portal():
     style_teacher_portal()
@@ -48,7 +46,7 @@ def take_attendance(teacher):
     st.subheader("Take Attendance", text_alignment="center")
     st.space()
 
-    lectures = get_lectures(teacher_id = teacher["teacher_id"])
+    lectures = get_lectures(teacher_id = teacher["teacher_id"], pending=True)
     labels = [f"{lecture["subjects"]["subject_name"]}, {lecture["subjects"]["course"]},  {lecture["division"]}" for lecture in lectures]
     options = [lecture for lecture in lectures]
 
@@ -84,16 +82,39 @@ def manage_subjects(teacher):
         st.info("📖 No subjects assigned by the authority yet!")
 
 def manage_lectures(teacher):
-    st.subheader("Manage Lectures", text_alignment="center")
+    st.subheader("Today's Lectures", text_alignment="center")
     lectures = get_lectures(teacher_id = teacher["teacher_id"])
 
     st.space()
     if lectures:
         for lecture in lectures:
-            subject = lecture["subjects"]
-            with st.container():
-                st.subheader(subject["subject_name"])
-                st.markdown(f":color[Time **{lecture["lec_timestamp"]}**    Division : **{lecture["division"]}**]{{foreground='#6B7280'}}")
-                st.markdown(f":color[Subject Code : **{subject['subject_code']}**  Semester : **{subject['semester']}**  Course : **{subject['course']}**]{{foreground='#6B7280'}}")
+            lecture_card(lecture)
     else:
         st.info("📚 No lectures scheduled by the authority for today!")
+
+    st.space()
+    st.subheader("Previous Lectures", text_alignment="center")
+    st.space()
+
+    prev_lectures = get_previous_lectures(teacher["teacher_id"])
+    
+    if prev_lectures:
+        for lecture in prev_lectures:
+            lecture_card(lecture)
+
+def lecture_card(lecture):
+    subject = lecture["subjects"]
+    timestamp = datetime.fromisoformat(lecture["lec_timestamp"]).astimezone(ZoneInfo("Asia/Kolkata"))
+    lec_date = timestamp.date().strftime("%d-%m-%Y")
+    lec_time = timestamp.time().strftime("%H:%M")
+    with st.container():
+        st.subheader(subject["subject_name"])
+        st.markdown(f"""
+        <div style='margin-top:5px;'>
+            <p style='color:#6B7280;'>📆  Date : <span style='font-weight:700;'>{lec_date}</span></p>
+            <p style='color:#6B7280;'>🕗  Time : <span style='font-weight:700;'>{lec_time}</span></p>
+            <p style='color:#6B7280;'>📓  Division : <span style='font-weight:700;'>{lecture["division"]}</span>     Subject Code : <span style='font-weight:700;'>{subject["subject_code"]}</span></p>
+            <p style='color:#6B7280;'>{"✅ Completed"if lecture["is_conducted"] else "❌ Not Conducted"}</p>
+        </div>
+        
+        """, unsafe_allow_html=True)

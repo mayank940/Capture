@@ -199,13 +199,18 @@ def nav_lectures(student):
 
     lectures = get_lectures(student_div=student["division"], student_course = student["course"])
 
-    for lecture in lectures:
-        lec_datetime = datetime.fromisoformat(lecture["lec_timestamp"]).astimezone(ZoneInfo("Asia/Kolkata"))
-        lec_time = lec_datetime.time()
-        with st.container():
-            st.subheader(lecture["subjects"]["subject_name"])
-            st.markdown(f":color[Time : **{lec_time}**]{{foreground='#6B7280'}}")
-            st.markdown(f":color[Conducted By : **{lecture["teachers"]["name"]}**]{{foreground='#6B7280'}}")
+    st.space()
+    if lectures:
+        for lecture in lectures:
+            lec_datetime = datetime.fromisoformat(lecture["lec_timestamp"]).astimezone(ZoneInfo("Asia/Kolkata"))
+            lec_time = lec_datetime.time()
+            with st.container():
+                st.subheader(lecture["subjects"]["subject_name"])
+                st.space()
+                st.markdown(f":color[🕗 Time : **{lec_time}**]{{foreground='#6B7280'}}")
+                st.markdown(f":color[🧑‍🏫 Conducted By : **{lecture["teachers"]["name"]}**]{{foreground='#6B7280'}}")
+    else:
+        st.info("📚 No lectures scheduled by the authority for today!")
 
 def nav_subjects(student):
     st.subheader("Manage Subjects", text_alignment="center")
