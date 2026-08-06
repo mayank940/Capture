@@ -137,7 +137,7 @@ def student_register_comp():
         if success:
             st.session_state["all_images"] = []
             st.space()
-            st.success(message, icon=":material/check_circle")
+            st.success(message, icon=":material/check_circle:")
             st.session_state["login_type"] = "login"
             time.sleep(1)
             st.rerun()
