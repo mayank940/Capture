@@ -26,6 +26,10 @@ def style_base_layout():
             display : none;
         }
 
+        div[data-testid="stMainBlockContainer"]{
+            padding : 3rem 1rem 10rem;
+        }
+
         [data-testid="stAppViewContainer"]{
             background-color : var(--background);
         }
