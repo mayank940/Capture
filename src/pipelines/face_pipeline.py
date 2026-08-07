@@ -55,7 +55,7 @@ def detect_faces(images_np, students = None):
     if not students:
         students = get_all_students()
     detected_students = []
-    similarity_threshold = 0.66
+    similarity_threshold = 0.6
 
     for i, embedding in enumerate(embeddings):
         best_score = -1
@@ -84,15 +84,16 @@ def detect_faces_attendance(images_np, students):
 
     embeddings = get_face_embeddings(images_np)
 
-    similarity_threshold = 0.66
+    similarity_threshold = 0.6
 
     for student in students:
         best_score = -1
         stored_embedding = np.array(student["face_embedding"])
         mean_emb = np.mean(stored_embedding if len(stored_embedding.shape) > 1 else [stored_embedding], axis=0)
+        mean_emb /= np.linalg.norm(mean_emb)
 
         for embedding in embeddings:
-            similarity_score = cosine_similarity(mean_emb.reshape(1, -1), np.array(embedding).reshape(1, -1))[0][0]
+            similarity_score = cosine_similarity(mean_emb.reshape(1, -1), embedding.reshape(1, -1))[0][0]
             if similarity_score > best_score:
                 best_score = similarity_score
 
