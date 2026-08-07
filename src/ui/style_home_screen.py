@@ -8,7 +8,7 @@ def style_home_screen():
         <style>
 
             .stApp div[data-testid="stColumn"]{
-                background-color: var(--card-background) !important;    
+                background-color: var(--card_background);    
                 padding: 1.5rem;
                 border-radius: 1.5rem;
                 box-shadow: 0 6px 8px 2px rgba(0, 0, 0, 0.3);
