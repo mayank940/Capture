@@ -1,7 +1,7 @@
 import streamlit as st
 from src.ui.style_student_screen import style_student_login_comps, remove_focus
 from src.database.db import add_student, check_student_exists, get_student_cred
-from src.pipelines.face_pipeline import get_face_embeddings, detect_faces
+from src.pipelines.face_pipeline import get_face_embeddings, detect_faces, check_difference
 from PIL import Image
 import numpy as np
 import time
@@ -88,6 +88,9 @@ def student_register_comp():
     if "all_images" not in st.session_state:
         st.session_state["all_images"] = []
 
+    if "uploader_key_reg" not in st.session_state:
+        st.session_state["uploader_key_reg"] = 0
+
     st.header("Register your student profile", text_alignment="center")
     st.space()
 
@@ -95,12 +98,19 @@ def student_register_comp():
     std_name = st.text_input("Full Name :", placeholder="Enter your full name")
     std_password = st.text_input("Password :", type="password", placeholder="Enter a new password")
     std_password_conf = st.text_input("Confirm Password :", type="password", placeholder="Confirm your password")
-    st.file_uploader("Choose image:", type="image", max_upload_size=15, accept_multiple_files=True, key = "reg_image")
+    selected_imgs = st.file_uploader(
+        "Choose image:", 
+        type="image", 
+        max_upload_size=15, 
+        accept_multiple_files=True, 
+        key = f"uploader_reg{st.session_state["uploader_key_reg"]}"
+    )
     remove_focus()
 
-    if st.session_state["reg_image"]:
-        if st.button("Add images", type="secondary"):
-            add_image()
+    if selected_imgs:
+        st.session_state["all_images"].extend(selected_imgs)
+        st.session_state["uploader_key_reg"] += 1
+        st.rerun()
 
     cam_text = "Close camera" if st.session_state["is_camera"] else "Take a picture"
     cam_icon = ":material/close:" if st.session_state["is_camera"] else ":material/add_a_photo:"    
@@ -163,15 +173,25 @@ def register_student(std_username, std_name, std_password, std_password_conf, st
     elif std_password != std_password_conf:
         return False, "Password does not match"
 
+    prog_bar = st.progress(0, "")
+    time.sleep(0.5)
+    prog_bar.progress(33, "⌛ Loading images...")
     image_np = [np.array(Image.open(img)) for img in std_imgs]
-    embeddings = get_face_embeddings(image_np)
-    embeddings = [emb.tolist() for emb in embeddings]
 
-    if len(embeddings) < 1:
+    prog_bar.progress(66, "🔍 Detecting Faces...")
+    embeddings = get_face_embeddings(image_np)
+
+    if len(embeddings) < len(image_np):
         return False, "Upload the image where face is clearly visible"
     elif len(embeddings) > len(image_np):
         return False, "Upload the image where only your face is visible"
 
+    is_different = check_difference(embeddings)
+    if is_different:
+        return False, "Different faces detected"
+
+    embeddings = [emb.tolist() for emb in embeddings]
+    prog_bar.progress(85, "⬆️ Uploading data...")
     try:
         add_student(std_username, std_name, std_password, embeddings)
         return True, "Successfully Registerd!"

@@ -111,32 +111,32 @@ def enroll_student_py(course, student_id):
         return False, "Unexpected Error!"
 
 def nav_attendance(student):
-    st.markdown("""
-    <style>
-
-    </style>
-
-    """,unsafe_allow_html=True)
-
     st.subheader("Attendance Summary", text_alignment="center")
     st.space()
 
-    logs_df = pd.DataFrame(get_attendance_records(student["student_id"]))
-    logs_df["subject_name"] = logs_df["lectures"].str.get("subjects").str.get("subject_name")
+    attendance_logs = get_attendance_records(student["student_id"])
 
-    attendance = (logs_df["is_present"].sum() / len(logs_df)) * 100 
+    if attendance_logs:
+        logs_df = pd.DataFrame(attendance_logs)
+        logs_df["subject_name"] = logs_df["lectures"].str.get("subjects").str.get("subject_name")
 
-    with st.container(border=True):
-        st.markdown(f":color[Overall Attendance : **{attendance:.2f} %**]{{foreground='#1F2937'}}")
-        st.markdown(f":color[Total lectures : {len(logs_df)}]{{foreground='#1F2937'}}")
-        st.markdown(f":color[Attended lectures : {logs_df["is_present"].sum()}]{{foreground='#1F2937'}}")
-        if st.button("View Summary", type="tertiary"):
-            attendance_summary(logs_df)
+        attendance = (logs_df["is_present"].sum() / len(logs_df)) * 100 
 
-    st.divider()
-    st.subheader("Attendance Records", text_alignment="center")
-    st.space()
-    attendance_records(student)
+        with st.container(border=True):
+            st.markdown(f":color[Overall Attendance : **{attendance:.2f} %**]{{foreground='#1F2937'}}")
+            st.markdown(f":color[Total lectures : {len(logs_df)}]{{foreground='#1F2937'}}")
+            st.markdown(f":color[Attended lectures : {logs_df["is_present"].sum()}]{{foreground='#1F2937'}}")
+            if st.button("View Summary", type="tertiary"):
+                attendance_summary(logs_df)
+
+        st.divider()
+        st.subheader("Attendance Records", text_alignment="center")
+        st.space()
+        attendance_records(student)
+
+    else:
+        st.space()
+        st.info("📚 No lectures conducted for you yet.")
 
 @st.fragment
 def attendance_records(student):
@@ -191,7 +191,7 @@ def attendance_summary(logs_df):
     summary_df = pd.DataFrame({"conducted" : total_lec, "attended" : attended_lec})
     summary_df = summary_df.reset_index()
     summary_df["percentage"] = round((summary_df["attended"] / summary_df["conducted"]) * 100, 2)
-    st.write((summary_df))
+    st.dataframe(summary_df)
     
 def nav_lectures(student):
     st.subheader("Today's Lectures", text_alignment="center")
@@ -204,11 +204,14 @@ def nav_lectures(student):
         for lecture in lectures:
             lec_datetime = datetime.fromisoformat(lecture["lec_timestamp"]).astimezone(ZoneInfo("Asia/Kolkata"))
             lec_time = lec_datetime.time()
+            lec_status = "✅ Completed" if lecture["is_conducted"] else "⏳ Attendance pending"
+
             with st.container():
                 st.subheader(lecture["subjects"]["subject_name"])
                 st.space()
-                st.markdown(f":color[🕗 Time : **{lec_time}**]{{foreground='#6B7280'}}")
+                st.markdown(f":color[🕗 Time : **{lec_time.strftime("%H:%M")}**]{{foreground='#6B7280'}}")
                 st.markdown(f":color[🧑‍🏫 Conducted By : **{lecture["teachers"]["name"]}**]{{foreground='#6B7280'}}")
+                st.markdown(f":color[{lec_status}]{{foreground='#6B7280'}}")
     else:
         st.info("📚 No lectures scheduled by the authority for today!")
 

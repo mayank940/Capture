@@ -84,7 +84,7 @@ def get_course_divisions(course_name):
     return response.data
 
 def get_div_students(course, division):
-    response = supabase.table("students").select("*").eq("course", course).eq("division", division).execute()
+    response = supabase.table("students").select("*").eq("course", course).eq("division", division).order("student_id").execute()
     return response.data
 
 

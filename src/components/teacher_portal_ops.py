@@ -72,6 +72,9 @@ def upload_img_comp(selected_lec):
         if "all_images" not in st.session_state:
             st.session_state["all_images"] = []
 
+        if "uploader_key_atdc" not in st.session_state:
+            st.session_state["uploader_key_atdc"] = 0
+
         if "is_camera" not in st.session_state:
             st.session_state["is_camera"] = False
 
@@ -79,14 +82,20 @@ def upload_img_comp(selected_lec):
         st.markdown(":color[**Choose Method :**]{foreground='#1F2937'}")
         img_cols = st.columns(3)
         with img_cols[0].popover("Upload Images", width="stretch", icon=":material/upload:"):
-            selected_imgs = st.file_uploader("Upload student's images:", type="image", max_upload_size=15, accept_multiple_files=True, label_visibility="collapsed",)
+            selected_imgs = st.file_uploader(
+                "Upload student's images:", 
+                type="image",
+                max_upload_size=15, 
+                accept_multiple_files=True, 
+                label_visibility="collapsed",
+                key= f"uploader_atdc{st.session_state["uploader_key_atdc"]}"
+            )
 
             if selected_imgs:
+                st.session_state["all_images"].extend(selected_imgs)
+                st.session_state["uploader_key_atdc"] += 1
+                st.rerun()
 
-                if st.button("Add images", type="tertiary", icon=":material/add:"):
-                    for img in selected_imgs:
-                        st.session_state["all_images"].append(img)
-                    st.rerun()
 
         btn_name = "Close Camera" if st.session_state["is_camera"] else "Use Camera"
         btn_icon = ":material/close:" if st.session_state["is_camera"] else ":material/add_a_photo:" 
@@ -111,7 +120,8 @@ def upload_img_comp(selected_lec):
 
         if st.session_state["all_images"]:
             st.space()
-            st.subheader("Selected Images :")
+            st.subheader("Uploaded Images :")
+            st.space()
 
             grid = st.columns(4)
 

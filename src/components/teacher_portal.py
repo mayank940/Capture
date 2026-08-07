@@ -107,6 +107,21 @@ def lecture_card(lecture):
     timestamp = datetime.fromisoformat(lecture["lec_timestamp"]).astimezone(ZoneInfo("Asia/Kolkata"))
     lec_date = timestamp.date().strftime("%d-%m-%Y")
     lec_time = timestamp.time().strftime("%H:%M")
+
+    today = datetime.combine(
+        date.today(),
+        time(0, 0),
+        ZoneInfo("Asia/Kolkata")
+    )
+    lec_status = "" 
+    if lecture["is_conducted"]:
+        lec_status = "✅ Completed"
+    elif not lecture["is_conducted"] and timestamp <= today:
+        lec_status = "❌ Not Conducted"
+    elif not lecture["is_conducted"]:
+        lec_status = "⏳ Attendance Pending"
+
+
     with st.container():
         st.subheader(subject["subject_name"])
         st.markdown(f"""
@@ -114,7 +129,7 @@ def lecture_card(lecture):
             <p style='color:#6B7280;'>📆  Date : <span style='font-weight:700;'>{lec_date}</span></p>
             <p style='color:#6B7280;'>🕗  Time : <span style='font-weight:700;'>{lec_time}</span></p>
             <p style='color:#6B7280;'>📓  Division : <span style='font-weight:700;'>{lecture["division"]}</span>     Subject Code : <span style='font-weight:700;'>{subject["subject_code"]}</span></p>
-            <p style='color:#6B7280;'>{"✅ Completed"if lecture["is_conducted"] else "❌ Not Conducted"}</p>
+            <p style='color:#6B7280;'>{lec_status}</p>
         </div>
         
         """, unsafe_allow_html=True)

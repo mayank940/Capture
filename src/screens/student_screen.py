@@ -15,6 +15,8 @@ def student_screen():
             st.session_state["user_role"] = None
             st.session_state["is_logged_in"] = False
             st.session_state["login_type"] = "login"
+            if "all_images" in st.session_state and st.session_state["all_images"]:
+                st.session_state["all_images"] = []
             st.rerun()
 
 

@@ -33,13 +33,29 @@ def get_face_embeddings(images_np):
 
     return embeddings
 
+def check_difference(embeddings):
+    first_n_emb = []
+    similarity_threshold = 0.6
+    for i, embedding in enumerate(embeddings):
+        if i == 0:
+            first_n_emb.append(embedding)
+            continue
+
+        mean_emb = np.mean(first_n_emb, axis=0)
+        similarity_score = cosine_similarity(mean_emb.reshape(1, -1), embedding.reshape(1, -1))[0][0]
+        if similarity_score < similarity_threshold:
+            return True
+        first_n_emb.append(embedding)
+    return False
+
+
 def detect_faces(images_np, students = None):
 
     embeddings = get_face_embeddings(images_np)
     if not students:
         students = get_all_students()
     detected_students = []
-    similarity_threshold = 0.6
+    similarity_threshold = 0.66
 
     for i, embedding in enumerate(embeddings):
         best_score = -1
@@ -68,7 +84,7 @@ def detect_faces_attendance(images_np, students):
 
     embeddings = get_face_embeddings(images_np)
 
-    similarity_threshold = 0.6
+    similarity_threshold = 0.66
 
     for student in students:
         best_score = -1
