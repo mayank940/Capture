@@ -6,6 +6,7 @@ import time
 def teacher_register_comp():
     
     style_teacher_login_comps()
+    st.space()
     st.header("Register your teacher profile", text_alignment="center")
     st.space()
 
@@ -57,6 +58,7 @@ def teacher_login_comp():
 
     style_teacher_login_comps()
 
+    st.space()
     st.header("Login using password", text_alignment="center")
     st.space()
 

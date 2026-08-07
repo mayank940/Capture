@@ -2,7 +2,7 @@ import streamlit as st
 from src.screens.home_screen import home_screen
 from src.screens.teacher_screen import teacher_screen
 from src.screens.student_screen import student_screen
-from src.screens.management import management_screen
+from src.screens.management import verify_admin
 
 def main():
     if "user_role" not in st.session_state:
@@ -20,7 +20,7 @@ def main():
         case "student":
             student_screen()
         case "authority":
-            management_screen()
+            verify_admin()
         case None: 
             home_screen()
 

@@ -12,6 +12,7 @@ def student_login_comp():
     if "is_camera" not in st.session_state:
         st.session_state["is_camera"] = False
 
+    st.space()
     st.header("Login using Password", text_alignment="center")
     st.space()
 
@@ -91,6 +92,7 @@ def student_register_comp():
     if "uploader_key_reg" not in st.session_state:
         st.session_state["uploader_key_reg"] = 0
 
+    st.space()
     st.header("Register your student profile", text_alignment="center")
     st.space()
 
@@ -98,6 +100,7 @@ def student_register_comp():
     std_name = st.text_input("Full Name :", placeholder="Enter your full name")
     std_password = st.text_input("Password :", type="password", placeholder="Enter a new password")
     std_password_conf = st.text_input("Confirm Password :", type="password", placeholder="Confirm your password")
+    st.space()
     selected_imgs = st.file_uploader(
         "Choose image:", 
         type="image", 

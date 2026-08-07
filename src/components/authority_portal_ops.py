@@ -11,6 +11,7 @@ def subject_comp():
         st.session_state["show_subject"] = False
 
     st.subheader("Add subjects", text_alignment="center")
+    st.space()
 
     course_name = st.text_input("Course Name:",placeholder="Enter course name").strip()
     semester = st.selectbox("Semester :",range(1, 9), index=None, placeholder="Select the semester")
